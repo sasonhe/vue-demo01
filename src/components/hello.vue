@@ -4,25 +4,29 @@
         <li class="item" v-for="item in text">
             <div class="start">{{item.id}}</div>
             <div class="center">
-                <p v-for="(item,index ) in num" @click="toggle(item)">
+                <p v-for="(item,index ) in num" @click="chooseOrder($event)">
                     {{item.id}}
                     <input type="checkbox" name="" v-model="val" :value="index">
                 </p>
             </div>
             <div class="end">
-                <p v-for="(item,index ) in type">{{item.id}}
+                <p v-for="(item,index ) in type" @click="selectStyle ($event)" :class="{index}">
+                    {{item.id}}
                     <input type="radio" name="" :value="index">
                 </p>
             </div>
         </li>
     </ul>
+    <!-- <span>{{val}}</span> -->
 </div>
 </template>
 <script>
+import Vue from 'vue'
 export default {
     data() {
         return {
             val: [],
+            active: false,
             text: [{
                     id: '万位'
                 },
@@ -41,7 +45,7 @@ export default {
             ],
             num: [{
                     id: 0,
-                    isActive: false
+                    isActive: true
                 },
                 {
                     id: 1,
@@ -104,8 +108,23 @@ export default {
 
     },
     methods: {
-        toggle: function(item) {
-            item.isActive = !item.isActive;
+        chooseOrder(e) {
+            if (e.target.className.indexOf("active") == -1) {
+                e.target.className = "active"; //切换按钮样式
+            } else {
+                e.target.className = ""; //切换按钮样式
+            }
+        },
+        selectStyle(e) {
+            if (e.target.className.indexOf("active") == -1) {
+                e.target.className = "active"; //切换按钮样式
+                console.log(e);
+                // var el = e.target.parentNode;
+                console.log(e.target.parentNode.childNodes);
+                // e.target.parentNode.childNodes.className = "";
+            } else {
+                e.target.className = ""; //切换按钮样式
+            }
         }
     },
     components: {
@@ -125,20 +144,20 @@ export default {
     margin-bottom: 12px;
 }
 
-.wrap .item p:hover {
+
+
+.wrap .item p.active {
     transition: all 0.4s;
     background: #ea8541;
     color: #fff;
-    cursor: pointer;
 }
 
-.wrap .item p span {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transition: all 0.4s;
+
+.wrap .item p:hover {
+    /* transition: all 0.4s;
     background: #ea8541;
-    color: #fff;
+    color: #fff; */
+    cursor: pointer;
 }
 
 .wrap .item div {
@@ -192,5 +211,6 @@ export default {
 .wrap .item .center p input,
 .wrap .item .end p input {
     display: none;
+    /* opacity: 0; */
 }
 </style>
